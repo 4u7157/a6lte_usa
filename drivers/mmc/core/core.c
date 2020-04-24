@@ -3429,6 +3429,25 @@ destroy_workqueue:
 	return ret;
 }
 
+#if defined(CONFIG_BCM4343) || defined(CONFIG_BCM4343_MODULE) || \
+	defined(CONFIG_BCM43454) || defined(CONFIG_BCM43454_MODULE) || \
+	defined(CONFIG_BCM43455) || defined(CONFIG_BCM43455_MODULE) || \
+	defined(CONFIG_BCM43456) || defined(CONFIG_BCM43456_MODULE)
+void mmc_ctrl_power(struct mmc_host *host, bool onoff)
+{
+	 if (!onoff) {
+		mmc_claim_host(host);
+                mmc_set_clock(host, host->f_init);
+		mmc_delay(1);
+		mmc_release_host(host);
+	 }
+}
+EXPORT_SYMBOL(mmc_ctrl_power);
+#endif /* CONFIG_BCM4343 || CONFIG_BCM4343_MODULE || \
+	  CONFIG_BCM43454 || CONFIG_BCM43454_MODULE || \
+	  CONFIG_BCM43455 || CONFIG_BCM43455_MODULE || \
+	  CONFIG_BCM43456 || CONFIG_BCM43456_MODULE */
+
 static void __exit mmc_exit(void)
 {
 	sdio_unregister_bus();
