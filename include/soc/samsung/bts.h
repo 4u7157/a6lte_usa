@@ -105,8 +105,6 @@ enum bts_scen_type {
 	TYPE_G3D_SCENARIO,
 	TYPE_CAM_BNS,
 };
-#else
-#define bts_scen_update(a, b) do {} while(0)
 #endif
 
 enum bts_bw_type {
@@ -170,7 +168,7 @@ struct bts_bw {
 	unsigned int write;
 };
 
-void bts_scen_update(enum bts_scen_type type, unsigned int val);
+void bts_update_scen(enum bts_scen_type type, unsigned int val);
 /* bandwidth (KB/s) */
 void bts_update_bw(enum bts_bw_type type, struct bts_bw bw);
 unsigned int bts_calc_bw(enum bts_bw_type type, void *data);
@@ -208,11 +206,22 @@ void exynos_update_media_scenario(enum bts_media_type media_type,
 #endif
 #define bts_update_gpu_mif(a) do {} while (0)
 #define exynos_bts_scitoken_setting(a) do {} while (0)
+#if defined(CONFIG_EXYNOS7870_BTS)
+int exynos_update_bts_param(int target_idx, int work);
+int exynos_bts_register_notifier(struct notifier_block *nb);
+int exynos_bts_unregister_notifier(struct notifier_block *nb);
+int exynos_update_overlay_wincnt(int cnt);
+else
 #define exynos7_update_media_scenario(a, b, c) do {} while (0)
 #define exynos7_update_bts_param(a, b) do {} while (0)
 #define exynos7_bts_register_notifier(a) do {} while (0)
 #define exynos7_bts_unregister_notifier(a) do {} while (0)
+#endif
+#if defined(CONFIG_EXYNOS7870_BTS)
+void bts_initialize(const char *pd_name, bool on);
+#else
 #define bts_initialize(a, b) do {} while (0)
+#endif
 #define exynos7_bts_show_mo_status() do {} while (0)
 #define exynos5_bts_show_mo_status() do { } while (0)
 #define bts_otf_initialize(a, b) do {} while (0)
