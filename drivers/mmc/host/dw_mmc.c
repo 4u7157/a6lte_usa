@@ -3357,6 +3357,33 @@ static void dw_mci_work_routine_card(struct work_struct *work)
 	}
 }
 
+#if defined(CONFIG_QCOM_WIFI) || defined(CONFIG_BCM4343)  || defined(CONFIG_BCM4343_MODULE)|| \
+	defined(CONFIG_BCM43454)  || defined(CONFIG_BCM43454_MODULE) || \
+	defined(CONFIG_BCM43455)  || defined(CONFIG_BCM43455_MODULE) || \
+	defined(CONFIG_BCM43456)  || defined(CONFIG_BCM43456_MODULE)
+static void dw_mci_notify_change(void *dev, int state)
+{
+	struct dw_mci *host = (struct dw_mci *)dev;
+	unsigned long flags;
+
+	if (host) {
+		spin_lock_irqsave(&host->lock, flags);
+		if (state) {
+			printk(KERN_ERR "card inserted\n");
+			host->pdata->quirks |= DW_MCI_QUIRK_BROKEN_CARD_DETECTION;
+		} else {
+			printk(KERN_ERR "card removed\n");
+			host->pdata->quirks &= ~DW_MCI_QUIRK_BROKEN_CARD_DETECTION;
+		}
+		queue_work(host->card_workqueue, &host->card_work);
+		spin_unlock_irqrestore(&host->lock, flags);
+	}
+}
+#endif /* CONFIG_QCOM_WIFI || CONFIG_BCM4343 || CONFIG_BCM4343_MODULE || \
+	CONFIG_BCM43454 || CONFIG_BCM43454_MODULE || \
+	CONFIG_BCM43455 || CONFIG_BCM43455_MODULE || \
+	CONFIG_BCM43456 || CONFIG_BCM43456_MODULE */
+
 #ifdef CONFIG_OF
 /* given a slot, find out the device node representing that slot */
 static struct device_node *dw_mci_of_find_slot_node(struct dw_mci_slot *slot)
