@@ -4414,6 +4414,24 @@ static struct dw_mci_board *dw_mci_parse_dt(struct dw_mci *host)
 
 	if (of_find_property(np, "pm-skip-mmc-resume-init", NULL))
 		pdata->pm_caps |= MMC_PM_SKIP_MMC_RESUME_INIT;
+
+#if defined(CONFIG_QCOM_WIFI) || defined(CONFIG_BCM4343)  || defined(CONFIG_BCM4343_MODULE) || \
+	defined(CONFIG_BCM43454)  || defined(CONFIG_BCM43454_MODULE) || \
+	defined(CONFIG_BCM43455)  || defined(CONFIG_BCM43455_MODULE) || \
+	defined(CONFIG_BCM43456)  || defined(CONFIG_BCM43456_MODULE) 
+	if (of_find_property(np, "pm-ignore-notify", NULL))
+		pdata->pm_caps |= MMC_PM_IGNORE_PM_NOTIFY;
+
+	if (of_find_property(np, "card-detect-type-external", NULL)) {
+		pdata->cd_type = DW_MCI_CD_EXTERNAL;
+		pdata->ext_cd_init = ext_cd_init_callback;
+		pdata->ext_cd_cleanup = ext_cd_cleanup_callback;
+	}
+#endif /* CONFIG_QCOM_WIFI || CONFIG_BCM4343 || CONFIG_BCM4343_MODULE || \
+	CONFIG_BCM43454 || CONFIG_BCM43454_MODULE || \
+	CONFIG_BCM43455 || CONFIG_BCM43455_MODULE || \
+	CONFIG_BCM43456 || CONFIG_BCM43456_MODULE */
+
 	if (of_find_property(np, "card-detect-invert-gpio", NULL))
 		pdata->caps2 |= MMC_CAP2_CD_ACTIVE_HIGH;
 	if (of_find_property(np, "card-detect-gpio", NULL)) {
