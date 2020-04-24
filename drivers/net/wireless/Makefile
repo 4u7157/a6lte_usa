@@ -2,6 +2,10 @@
 # Makefile for the Linux Wireless network device drivers.
 #
 
+obj-$(CONFIG_BCM4343) += bcmdhd_100_15/
+obj-$(CONFIG_BCM4343) += bcmdhd_100_15/dhd_custom_memprealloc.o
+obj-$(CONFIG_BCM4343) += bcmdhd_100_15/dhd_custom_exynos.o
+
 obj-$(CONFIG_IPW2100) += ipw2x00/
 obj-$(CONFIG_IPW2200) += ipw2x00/
 
