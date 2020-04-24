@@ -3124,14 +3124,31 @@ void mmc_start_host(struct mmc_host *host)
 		mmc_power_off(host);
 	else
 		mmc_power_up(host, host->ocr_avail);
+		mmc_release_host(host);
+#if defined(CONFIG_QCOM_WIFI) || defined(CONFIG_BCM4343)  || defined(CONFIG_BCM4343_MODULE) || \
+	defined(CONFIG_BCM43454)  || defined(CONFIG_BCM43454_MODULE) || \
+	defined(CONFIG_BCM43455)  || defined(CONFIG_BCM43455_MODULE) || \
+	defined(CONFIG_BCM43456)  || defined(CONFIG_BCM43456_MODULE)
+	if (!strcmp("mmc1", mmc_hostname(host))) {
+		printk("%s skip mmc_detect_change\n", mmc_hostname(host));
+	} else if (host->caps2 & MMC_CAP2_SKIP_INIT_SCAN) {
+		printk("%s skip mmc detect change\n", mmc_hostname(host));
+	} else {
+		mmc_gpiod_request_cd_irq(host);
+		_mmc_detect_change(host, 0, false);
+	}
+#else
 	mmc_release_host(host);
-
 	if (host->caps2 & MMC_CAP2_SKIP_INIT_SCAN)
 		printk("%s skip mmc detect change\n", mmc_hostname(host));
 	else {
 		mmc_gpiod_request_cd_irq(host);
 		_mmc_detect_change(host, 0, false);
 	}
+#endif /* CONFIG_QCOM_WIFI || CONFIG_BCM4343 || CONFIG_BCM4343_MODULE || \
+	CONFIG_BCM43454 || CONFIG_BCM43454_MODULE || \
+	CONFIG_BCM43455 || CONFIG_BCM43455_MODULE || \
+	CONFIG_BCM43456 || CONFIG_BCM43456_MODULE */
 }
 
 void mmc_stop_host(struct mmc_host *host)
