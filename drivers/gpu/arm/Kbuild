@@ -9,26 +9,33 @@
 #
 #
 
-ifeq ($(CONFIG_MALI_TMIX),y)
-	ifeq ($(CONFIG_MALI_TMIX_R0P0),y)
-		obj-y += tMIx/r0p0/
+
+ifeq ($(CONFIG_MALI_T8XX),y)
+	ifeq ($(CONFIG_MALI_R5P0_REL),y)
+		obj-y += t8xx/r5p0/
 	endif
-	ifeq ($(CONFIG_MALI_TMIX_R2P0),y)
-		obj-y += tMIx/r2p0/
-	endif
-	ifeq ($(CONFIG_MALI_TMIX_R3P0),y)
-		obj-y += tMIx/r3p0/
-	endif
-	ifeq ($(CONFIG_MALI_TMIX_R8P0),y)
-		obj-y += tMIx/r8p0/
-	endif
-	ifeq ($(CONFIG_MALI_TMIX_R9P0),y)
-		obj-y += tMIx/r9p0/
-	endif
-	ifeq ($(CONFIG_MALI_TMIX_R10P0),y)
-		obj-y += tMIx/r10p0/
-	endif
-	ifeq ($(CONFIG_MALI_TMIX_R16P0),y)
-		obj-y += tMIx/b_r16p0/
-	endif
+    ifeq ($(CONFIG_MALI_R7P0),y)
+        obj-y += t8xx/r7p0/
+    endif
+endif
+
+ifeq ($(CONFIG_MALI_T83X),y)
+    ifeq ($(CONFIG_MALI_R12P0),y)
+        obj-y += t83x/r12p0/
+    endif
+    ifeq ($(CONFIG_MALI_R15P0),y)
+        obj-y += t83x/r15p0/
+    endif
+    ifeq ($(CONFIG_MALI_R21P0),y)
+        obj-y += t83x/r21p0/
+    endif
+    ifeq ($(CONFIG_MALI_R22P0),y)
+        obj-y += t83x/r22p0/
+    endif
+    ifeq ($(CONFIG_MALI_R28P0),y)
+        obj-y += t83x/r28p0/
+    endif
+	ifeq ($(CONFIG_MALI_R29P0),y)
+        obj-y += t83x/r29p0/
+    endif
 endif

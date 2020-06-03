@@ -11,7 +11,10 @@
 
 
 menu "ARM GPU Configuration"
-if (SOC_EXYNOS7885 || SOC_EXYNOS7872)
-source "drivers/gpu/arm/tMIx/Kconfig"
+if (SOC_EXYNOS8890)
+source "drivers/gpu/arm/t8xx/Kconfig"
+endif
+if (SOC_EXYNOS7870)
+source "drivers/gpu/arm/t83x/Kconfig"
 endif
 endmenu
